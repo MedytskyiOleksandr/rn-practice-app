@@ -21,9 +21,10 @@ const OrederNavigator = () => {
                 headerTitleStyle: {
                     fontFamily: 'open-sans-bold'
                 },
-                headerBackTitle: {
+                headerBackTitleStyle: {
                     fontFamily: 'open-sans'
-                }
+                },
+                headerBackTitle: "Back"
             }}
         >
             <Stack.Screen name="Orders" component={OrdersScreen} options={(navData) => ({

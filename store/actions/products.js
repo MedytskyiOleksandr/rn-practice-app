@@ -46,7 +46,7 @@ export const deleteProduct = productId => {
       }
     );
 
-    if(!responce.ok) {
+    if (!responce.ok) {
       throw new Error('Something went wrong!')
     }
     dispatch({ type: DELETE_PRODUCT, pid: productId });
@@ -69,6 +69,10 @@ export const createProduct = (title, description, imageUrl, price) => {
     })
 
     const responceData = await responce.json();
+
+    if (!responce.ok) {
+      throw new Error('Something went wrong')
+    }
 
     dispatch({
       type: CREATE_PRODUCT,
@@ -99,7 +103,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
       })
     })
 
-    if(!responce.ok) {
+    if (!responce.ok) {
       throw new Error('Something went wrong')
     }
 
