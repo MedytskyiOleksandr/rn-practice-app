@@ -21,9 +21,10 @@ const UserNavigator = () => {
                 headerTitleStyle: {
                     fontFamily: 'open-sans-bold'
                 },
-                headerBackTitle: {
+                headerBackTitleStyle: {
                     fontFamily: 'open-sans'
-                }
+                },
+                headerBackTitle: "Back"
             }}
         >
             <Stack.Screen name="Your Products" component={UserProductsScreen} options={(navData) => ({

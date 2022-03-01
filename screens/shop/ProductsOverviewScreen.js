@@ -28,7 +28,7 @@ const ProductsOverviewScreen = props => {
   useEffect(() => {
     const subscription = props.navigation.addListener('focus', loadProducts);
 
-    return () => subscription?.remove()
+    return subscription
     
   }, [loadProducts]) 
 
