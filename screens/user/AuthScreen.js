@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   ScrollView,
   View,
@@ -11,10 +11,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux';
 
-import * as authActions from '../../store/actions/auth'
 import Input from '../../components/UI/Input';
 import Card from '../../components/UI/Card';
 import Colors from '../../constants/Colors';
+import * as authActions from '../../store/actions/auth';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -42,10 +42,9 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = props => {
-  const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-
+  const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -60,35 +59,34 @@ const AuthScreen = props => {
     formIsValid: false
   });
 
-  const authHandler = () => {
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
+    }
+  }, [error]);
+
+  const authHandler = async () => {
     let action;
-    if (isSignUp) {
+    if (isSignup) {
       action = authActions.signup(
-        formState.initialValues.email,
+        formState.inputValues.email,
         formState.inputValues.password
-      )
+      );
     } else {
-      action = action = authActions.login(
-        formState.initialValues.email,
+      action = authActions.login(
+        formState.inputValues.email,
         formState.inputValues.password
-      )
+      );
     }
     setError(null);
     setIsLoading(true);
     try {
-      dispatch(action).then(
-        setIsLoading(false)
-      );
+      await dispatch(action);
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
     }
-  }
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert("An Error Occured!", error, [{ text: 'Okay' }])
-    }
-  })
+  };
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -103,11 +101,6 @@ const AuthScreen = props => {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={50}
-      style={styles.screen}
-    >
       <LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>
         <Card style={styles.authContainer}>
           <ScrollView>
@@ -139,24 +132,24 @@ const AuthScreen = props => {
                 <ActivityIndicator size="small" color={Colors.primary} />
               ) : (
                 <Button
-                  title={isSignUp ? 'Sign Up' : 'Login'}
+                  title={isSignup ? 'Sign Up' : 'Login'}
                   color={Colors.primary}
-                  onPress={authHandler} />
+                  onPress={authHandler}
+                />
               )}
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={`Switch to ${isSignUp ? 'Login' : 'Sign Up'}`}
+                title={`Switch to ${isSignup ? 'Login' : 'Sign Up'}`}
                 color={Colors.accent}
                 onPress={() => {
-                  setIsSignUp(prevState => !prevState);
+                  setIsSignup(prevState => !prevState);
                 }}
               />
             </View>
           </ScrollView>
         </Card>
       </LinearGradient>
-    </KeyboardAvoidingView>
   );
 };
 
