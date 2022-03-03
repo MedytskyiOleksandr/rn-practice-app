@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Colors from "../constants/Colors";
 import AuthScreen from "../screens/user/AuthScreen";
+import StartupScreen from "../screens/StartupScreen";
 
 const Stack = createStackNavigator()
 
@@ -23,6 +24,9 @@ const AuthNavigator = () => {
                 headerBackTitle: "Back"
             }}
         >
+            <Stack.Screen name="Startup" component={StartupScreen} options={{
+                headerShown: false
+            }} />
             <Stack.Screen name="Authenticate" component={AuthScreen} />
         </Stack.Navigator>
     );
