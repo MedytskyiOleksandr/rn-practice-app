@@ -4,9 +4,10 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
 export const fetchOrders = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
         try {
-            const responce = await fetch('https://rn-test-medyk-default-rtdb.firebaseio.com/orders/u1.json')
+            const responce = await fetch(`https://rn-test-medyk-default-rtdb.firebaseio.com/orders/${userId}.json`)
 
             if (!responce.ok) {
                 throw new Error("Something goes wrong!")
@@ -35,9 +36,11 @@ export const fetchOrders = () => {
 }
 
 export const addOrder = (cartItems, totalAmount) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const userId = getState().auth.userId;
         const date = new Date()
-        const responce = await fetch('https://rn-test-medyk-default-rtdb.firebaseio.com/orders/u1.json', {
+        const responce = await fetch(`https://rn-test-medyk-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
